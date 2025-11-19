@@ -32,7 +32,10 @@ func (r *CategoryRepository) GetAll() ([]models.Category, error) {
 func (r *CategoryRepository) GetByID(id uint) (*models.Category, error) {
 	var category models.Category
 	err := r.db.First(&category, id).Error
-	return &category, err
+	if err != nil {
+		return nil, err
+	}
+	return &category, nil
 }
 
 // Update updates a category

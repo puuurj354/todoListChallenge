@@ -93,7 +93,7 @@ func TestTodoService_GetTodos(t *testing.T) {
 	service.CreateTodo(&models.Todo{Title: "Second Todo"})
 
 	t.Run("success with defaults", func(t *testing.T) {
-		todos, total, err := service.GetTodos(1, 10, "", "created_at", "desc")
+		todos, total, err := service.GetTodos(1, 10, "", "created_at", "desc", make(map[string]interface{}))
 
 		assert.NoError(t, err)
 		assert.Equal(t, int64(2), total)
@@ -101,7 +101,7 @@ func TestTodoService_GetTodos(t *testing.T) {
 	})
 
 	t.Run("with search", func(t *testing.T) {
-		todos, total, err := service.GetTodos(1, 10, "First", "created_at", "desc")
+		todos, total, err := service.GetTodos(1, 10, "First", "created_at", "desc", make(map[string]interface{}))
 
 		assert.NoError(t, err)
 		assert.Equal(t, int64(1), total)
@@ -177,5 +177,71 @@ func TestTodoService_ToggleComplete(t *testing.T) {
 		// Verify toggle
 		updated, _ := service.GetTodoByID(todo.ID)
 		assert.True(t, updated.Completed)
+	})
+}
+
+func TestTodoService_GetTodosWithFilters(t *testing.T) {
+	db := setupTestDB()
+	repo := repository.NewTodoRepository(db)
+	service := NewTodoService(repo)
+
+	// Create category
+	category := &models.Category{Name: "Work", Color: "#3B82F6"}
+	db.Create(category)
+
+	// Create todos with different attributes
+	service.CreateTodo(&models.Todo{Title: "Todo 1", Completed: true, CategoryID: &category.ID, Priority: models.PriorityHigh})
+	service.CreateTodo(&models.Todo{Title: "Todo 2", Completed: false, CategoryID: &category.ID, Priority: models.PriorityMedium})
+	service.CreateTodo(&models.Todo{Title: "Todo 3", Completed: false, Priority: models.PriorityLow})
+
+	t.Run("filter by completed status", func(t *testing.T) {
+		filters := map[string]interface{}{"completed": false}
+		todos, total, err := service.GetTodos(1, 10, "", "created_at", "desc", filters)
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(2), total)
+		assert.Len(t, todos, 2)
+		assert.False(t, todos[0].Completed)
+	})
+
+	t.Run("filter by category", func(t *testing.T) {
+		filters := map[string]interface{}{"category_id": category.ID}
+		todos, total, err := service.GetTodos(1, 10, "", "created_at", "desc", filters)
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(2), total)
+		assert.Len(t, todos, 2)
+	})
+
+	t.Run("filter by priority", func(t *testing.T) {
+		filters := map[string]interface{}{"priority": string(models.PriorityHigh)}
+		todos, total, err := service.GetTodos(1, 10, "", "created_at", "desc", filters)
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(1), total)
+		assert.Len(t, todos, 1)
+		assert.Equal(t, models.PriorityHigh, todos[0].Priority)
+	})
+
+	t.Run("combined filters", func(t *testing.T) {
+		filters := map[string]interface{}{
+			"completed":   false,
+			"category_id": category.ID,
+			"priority":    string(models.PriorityMedium),
+		}
+		todos, total, err := service.GetTodos(1, 10, "", "created_at", "desc", filters)
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(1), total)
+		assert.Len(t, todos, 1)
+		assert.Equal(t, "Todo 2", todos[0].Title)
+	})
+
+	t.Run("invalid priority filter should be ignored", func(t *testing.T) {
+		filters := map[string]interface{}{"priority": "invalid"}
+		_, total, err := service.GetTodos(1, 10, "", "created_at", "desc", filters)
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(3), total) // Should return all todos
 	})
 }

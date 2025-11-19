@@ -25,7 +25,10 @@ func (r *TodoRepository) Create(todo *models.Todo) error {
 func (r *TodoRepository) GetByID(id uint) (*models.Todo, error) {
 	var todo models.Todo
 	err := r.db.Preload("Category").First(&todo, id).Error
-	return &todo, err
+	if err != nil {
+		return nil, err
+	}
+	return &todo, nil
 }
 
 // GetAll gets todos with pagination and filters
@@ -35,9 +38,13 @@ func (r *TodoRepository) GetAll(page, limit int, search, sortBy, sortOrder strin
 
 	query := r.db.Model(&models.Todo{}).Preload("Category")
 
-	// Search filter
+	// Search filter - use LIKE for SQLite compatibility, ILIKE for PostgreSQL
 	if search != "" {
-		query = query.Where("title ILIKE ? OR description ILIKE ?", "%"+search+"%", "%"+search+"%")
+		if r.db.Dialector.Name() == "postgres" {
+			query = query.Where("title ILIKE ? OR description ILIKE ?", "%"+search+"%", "%"+search+"%")
+		} else {
+			query = query.Where("title LIKE ? OR description LIKE ?", "%"+search+"%", "%"+search+"%")
+		}
 	}
 
 	// Filter by completion status
