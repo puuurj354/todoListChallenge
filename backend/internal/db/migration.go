@@ -3,47 +3,68 @@ package db
 import (
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
-	"sort"
-	"strings"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"gorm.io/gorm"
 )
 
-// RunMigrations executes all up migration files in order
-func RunMigrations(db *gorm.DB) error {
-	migrationDir := "internal/db/migrations"
 
-	files, err := filepath.Glob(filepath.Join(migrationDir, "*.up.sql"))
+func RunMigrations(db *gorm.DB) error {
+
+	sqlDB, err := db.DB()
 	if err != nil {
-		return fmt.Errorf("failed to find migration files: %w", err)
+		return fmt.Errorf("failed to get SQL DB from GORM: %w", err)
 	}
 
-	sort.Strings(files) 
-
-	for _, file := range files {
-		log.Printf("Running migration: %s", file)
-
-		sql, err := os.ReadFile(file)
-		if err != nil {
-			return fmt.Errorf("failed to read migration file %s: %w", file, err)
-		}
+	driver, err := postgres.WithInstance(sqlDB, &postgres.Config{})
+	if err != nil {
+		return fmt.Errorf("failed to create postgres driver: %w", err)
+	}
 
 	
-		statements := strings.Split(string(sql), ";")
-		for _, stmt := range statements {
-			stmt = strings.TrimSpace(stmt)
-			if stmt == "" {
-				continue
-			}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://internal/db/migrations", 
+		"postgres", driver)
+	if err != nil {
+		return fmt.Errorf("failed to create migrate instance: %w", err)
+	}
+	defer m.Close()
 
-			if err := db.Exec(stmt).Error; err != nil {
-				return fmt.Errorf("failed to execute migration statement in %s: %w", file, err)
-			}
-		}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		return fmt.Errorf("failed to run migrations: %w", err)
 	}
 
 	log.Println("All migrations completed successfully")
+	return nil
+}
+
+// rollbackMigrations 
+func RollbackMigrations(db *gorm.DB, steps int) error {
+	sqlDB, err := db.DB()
+	if err != nil {
+		return fmt.Errorf("failed to get SQL DB from GORM: %w", err)
+	}
+
+	driver, err := postgres.WithInstance(sqlDB, &postgres.Config{})
+	if err != nil {
+		return fmt.Errorf("failed to create postgres driver: %w", err)
+	}
+
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://internal/db/migrations",
+		"postgres", driver)
+	if err != nil {
+		return fmt.Errorf("failed to create migrate instance: %w", err)
+	}
+	defer m.Close()
+
+	if err := m.Steps(-steps); err != nil {
+		return fmt.Errorf("failed to rollback migrations: %w", err)
+	}
+
+	log.Printf("Rolled back %d migration steps", steps)
 	return nil
 }
