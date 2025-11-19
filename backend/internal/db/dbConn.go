@@ -10,44 +10,45 @@ import (
 	"gorm.io/gorm"
 )
 
-// Connect returns a gorm DB pointer using environment configuration.
-// It loads `.env` in development if present.
-func Connect() (*gorm.DB, error) {
-	// Load .env file if present
-	_ = godotenv.Load()
+var DB *gorm.DB
 
-	host := getenvDefault("DB_HOST", "localhost")
-	port := getenvDefault("DB_PORT", "5432")
-	user := getenvDefault("DB_USER", "postgres")
-	password := getenvDefault("DB_PASSWORD", "postgres")
-	dbname := getenvDefault("DB_NAME", "todolistChallenge")
-	sslmode := getenvDefault("DB_SSLMODE", "disable")
+func InitDB() {
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=UTC",
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found, using default environment variables")
+	}
+
+
+	host := getEnv("DB_HOST", "localhost")
+	user := getEnv("DB_USER", "postgres")
+	password := getEnv("DB_PASSWORD", "")
+	dbname := getEnv("DB_NAME", "todolistChallenge")
+	port := getEnv("DB_PORT", "5432")
+	sslmode := getEnv("DB_SSLMODE", "disable")
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		host, user, password, dbname, port, sslmode)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	// Connect to database
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Printf("Failed to connect to DB: %v\n", err)
-		return nil, err
+		log.Fatal("Failed to connect to database:", err)
 	}
 
-	sqlDB, err := db.DB()
-	if err != nil {
-		return nil, err
-	}
-	// Set some reasonable connection pool defaults
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(50)
+	log.Println("Database connected successfully")
 
-	return db, nil
+	// Run migrations
+	if err := RunMigrations(DB); err != nil {
+		log.Fatal("Failed to run migrations:", err)
+	}
 }
 
-// getenvDefault returns env var value or a default if empty
-func getenvDefault(key, def string) string {
-	val := os.Getenv(key)
-	if val == "" {
-		return def
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
-	return val
+	return defaultValue
 }
+
+

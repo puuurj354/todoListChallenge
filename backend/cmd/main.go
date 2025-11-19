@@ -1,8 +1,11 @@
 package main
 
-import "fmt"
-
+import (
+	"fmt"
+	"todoListChallenge/internal/db"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	db.InitDB()
+	fmt.Println("Database connected successfully!")
 }
