@@ -42,6 +42,10 @@ func InitDB() {
 	if err := RunMigrations(DB); err != nil {
 		log.Fatal("Failed to run migrations:", err)
 	}
+	// Run migrations
+	if err := RunMigrations(DB); err != nil {
+		log.Fatal("Failed to run migrations:", err)
+	}
 }
 
 func getEnv(key, defaultValue string) string {
