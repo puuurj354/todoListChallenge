@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Todo, TodoInput, TodosResponse, Category } from "../types/todos"
+import type { Todo, TodoInput, TodosResponse, Category } from "../types/todos"
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api"
 

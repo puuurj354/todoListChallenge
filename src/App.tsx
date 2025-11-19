@@ -16,7 +16,7 @@ import StatisticsCards from "./components/StatisticsCards"
 import TodoItem from "./components/TodoItem"
 import TodoFormModal from "./components/TodoFormModal"
 import { todoApi, categoryApi } from "./services/api"
-import { Todo, TodoInput, Category, TodoStatistics } from "./types/todos"
+import type { Todo, TodoInput, Category, TodoStatistics } from "./types/todos"
 import "./App.css"
 
 const { Header, Content } = Layout

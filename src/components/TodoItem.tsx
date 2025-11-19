@@ -1,6 +1,6 @@
 import { Card, Checkbox, Tag, Space, Button, Typography } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
-import { Todo } from "../types/todos"
+import type { Todo } from "../types/todos"
 
 const { Text, Paragraph } = Typography
 
@@ -20,11 +20,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "#f5222d" // red
+        return "#f5222d"
       case "medium":
-        return "#faad14" // yellow
+        return "#faad14"
       case "low":
-        return "#52c41a" // green
+        return "#52c41a"
       default:
         return "#d9d9d9"
     }
