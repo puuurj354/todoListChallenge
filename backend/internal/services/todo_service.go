@@ -31,7 +31,7 @@ func (s *TodoService) GetTodoByID(id uint) (*models.Todo, error) {
 }
 
 // GetTodos gets todos with pagination and filters
-func (s *TodoService) GetTodos(page, limit int, search, sortBy, sortOrder string) ([]models.Todo, int64, error) {
+func (s *TodoService) GetTodos(page, limit int, search, sortBy, sortOrder string, filters map[string]interface{}) ([]models.Todo, int64, error) {
 	// Validate pagination
 	if page < 1 {
 		page = 1
@@ -41,7 +41,7 @@ func (s *TodoService) GetTodos(page, limit int, search, sortBy, sortOrder string
 	}
 
 	// Validate sort
-	validSortFields := map[string]bool{"title": true, "created_at": true, "updated_at": true, "due_date": true}
+	validSortFields := map[string]bool{"title": true, "created_at": true, "updated_at": true, "due_date": true, "priority": true}
 	if sortBy != "" && !validSortFields[sortBy] {
 		sortBy = "created_at"
 	}
@@ -49,7 +49,14 @@ func (s *TodoService) GetTodos(page, limit int, search, sortBy, sortOrder string
 		sortOrder = "desc"
 	}
 
-	return s.repo.GetAll(page, limit, search, sortBy, sortOrder)
+	// Validate priority filter
+	if priority, ok := filters["priority"].(string); ok && priority != "" {
+		if priority != string(models.PriorityHigh) && priority != string(models.PriorityMedium) && priority != string(models.PriorityLow) {
+			delete(filters, "priority") // Remove invalid priority filter
+		}
+	}
+
+	return s.repo.GetAll(page, limit, search, sortBy, sortOrder, filters)
 }
 
 // UpdateTodo updates a todo with validation

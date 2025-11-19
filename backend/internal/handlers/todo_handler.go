@@ -43,7 +43,31 @@ func (h *TodoHandler) GetTodos(c *gin.Context) {
 	sortBy := c.DefaultQuery("sort_by", "created_at")
 	sortOrder := c.DefaultQuery("sort_order", "desc")
 
-	todos, total, err := h.service.GetTodos(page, limit, search, sortBy, sortOrder)
+	// Build filters from query parameters
+	filters := make(map[string]interface{})
+
+	// Filter by completion status
+	if completedStr := c.Query("completed"); completedStr != "" {
+		completed, err := strconv.ParseBool(completedStr)
+		if err == nil {
+			filters["completed"] = completed
+		}
+	}
+
+	// Filter by category ID
+	if categoryIDStr := c.Query("category_id"); categoryIDStr != "" {
+		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 32)
+		if err == nil {
+			filters["category_id"] = uint(categoryID)
+		}
+	}
+
+	// Filter by priority
+	if priority := c.Query("priority"); priority != "" {
+		filters["priority"] = priority
+	}
+
+	todos, total, err := h.service.GetTodos(page, limit, search, sortBy, sortOrder, filters)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

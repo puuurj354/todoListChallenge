@@ -29,7 +29,7 @@ func (r *TodoRepository) GetByID(id uint) (*models.Todo, error) {
 }
 
 // GetAll gets todos with pagination and filters
-func (r *TodoRepository) GetAll(page, limit int, search, sortBy, sortOrder string) ([]models.Todo, int64, error) {
+func (r *TodoRepository) GetAll(page, limit int, search, sortBy, sortOrder string, filters map[string]interface{}) ([]models.Todo, int64, error) {
 	var todos []models.Todo
 	var total int64
 
@@ -37,7 +37,22 @@ func (r *TodoRepository) GetAll(page, limit int, search, sortBy, sortOrder strin
 
 	// Search filter
 	if search != "" {
-		query = query.Where("title ILIKE ?", "%"+search+"%")
+		query = query.Where("title ILIKE ? OR description ILIKE ?", "%"+search+"%", "%"+search+"%")
+	}
+
+	// Filter by completion status
+	if completed, ok := filters["completed"].(bool); ok {
+		query = query.Where("completed = ?", completed)
+	}
+
+	// Filter by category ID
+	if categoryID, ok := filters["category_id"].(uint); ok {
+		query = query.Where("category_id = ?", categoryID)
+	}
+
+	// Filter by priority
+	if priority, ok := filters["priority"].(string); ok && priority != "" {
+		query = query.Where("priority = ?", priority)
 	}
 
 	// Count total
