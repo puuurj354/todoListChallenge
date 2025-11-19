@@ -1,47 +1,47 @@
-import { Card, Checkbox, Tag, Space, Button, Typography } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Todo } from '../types/todos';
+import { Card, Checkbox, Tag, Space, Button, Typography } from "antd"
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
+import { Todo } from "../types/todos"
 
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph } = Typography
 
 interface TodoItemProps {
-  todo: Todo;
-  onToggleComplete: (id: number) => void;
-  onEdit: (todo: Todo) => void;
-  onDelete: (id: number) => void;
+  todo: Todo
+  onToggleComplete: (id: number) => void
+  onEdit: (todo: Todo) => void
+  onDelete: (id: number) => void
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ 
-  todo, 
-  onToggleComplete, 
-  onEdit, 
-  onDelete 
+const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  onToggleComplete,
+  onEdit,
+  onDelete,
 }) => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high':
-        return '#f5222d'; // red
-      case 'medium':
-        return '#faad14'; // yellow
-      case 'low':
-        return '#52c41a'; // green
+      case "high":
+        return "#f5222d" // red
+      case "medium":
+        return "#faad14" // yellow
+      case "low":
+        return "#52c41a" // green
       default:
-        return '#d9d9d9';
+        return "#d9d9d9"
     }
-  };
+  }
 
   const getPriorityBgColor = (priority: string) => {
     switch (priority) {
-      case 'high':
-        return '#fff1f0';
-      case 'medium':
-        return '#fffbe6';
-      case 'low':
-        return '#f6ffed';
+      case "high":
+        return "#fff1f0"
+      case "medium":
+        return "#fffbe6"
+      case "low":
+        return "#f6ffed"
       default:
-        return '#fafafa';
+        return "#fafafa"
     }
-  };
+  }
 
   return (
     <Card
@@ -49,12 +49,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
         marginBottom: 16,
         borderRadius: 8,
         opacity: todo.completed ? 0.7 : 1,
-        transition: 'all 0.3s ease',
+        transition: "all 0.3s ease",
       }}
-      bodyStyle={{ padding: '16px 20px' }}
+      bodyStyle={{ padding: "16px 20px" }}
     >
-      <Space direction="vertical" style={{ width: '100%' }} size={8}>
-        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+      <Space direction="vertical" style={{ width: "100%" }} size={8}>
+        <Space style={{ width: "100%", justifyContent: "space-between" }}>
           <Space>
             <Checkbox
               checked={todo.completed}
@@ -65,7 +65,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
               delete={todo.completed}
               style={{
                 fontSize: 16,
-                color: todo.completed ? '#8c8c8c' : '#262626',
+                color: todo.completed ? "#8c8c8c" : "#262626",
               }}
             >
               {todo.title}
@@ -91,8 +91,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
         {todo.description && (
           <Paragraph
             style={{
-              margin: '0 0 0 24px',
-              color: '#595959',
+              margin: "0 0 0 24px",
+              color: "#595959",
               fontSize: 14,
             }}
             ellipsis={{ rows: 2, expandable: false }}
@@ -107,7 +107,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
               color={todo.category.color}
               style={{
                 borderRadius: 4,
-                padding: '2px 8px',
+                padding: "2px 8px",
                 fontWeight: 500,
               }}
             >
@@ -118,9 +118,9 @@ const TodoItem: React.FC<TodoItemProps> = ({
             style={{
               backgroundColor: getPriorityBgColor(todo.priority),
               color: getPriorityColor(todo.priority),
-              border: 'none',
+              border: "none",
               borderRadius: 4,
-              padding: '2px 8px',
+              padding: "2px 8px",
               fontWeight: 500,
             }}
           >
@@ -129,7 +129,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
         </Space>
       </Space>
     </Card>
-  );
-};
+  )
+}
 
-export default TodoItem;
+export default TodoItem
