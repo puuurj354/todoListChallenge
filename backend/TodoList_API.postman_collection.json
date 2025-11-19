@@ -1,0 +1,759 @@
+{
+  "info": {
+    "name": "Todo List API",
+    "_postman_id": "todo-list-api-v1",
+    "description": "Complete API collection for Todo List Challenge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create Category - Work",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Work\",\n  \"color\": \"#3B82F6\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category - Personal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Personal\",\n  \"color\": \"#10B981\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category - Shopping",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Shopping\",\n  \"color\": \"#EF4444\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Work Updated\",\n  \"color\": \"#6366F1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Todos - CRUD",
+      "item": [
+        {
+          "name": "Create Todo - High Priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Complete coding challenge\",\n  \"description\": \"Build a full-stack todo application for Industrix\",\n  \"completed\": false,\n  \"category_id\": 1,\n  \"priority\": \"high\",\n  \"due_date\": \"2024-08-03T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/todos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Todo - Medium Priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Review pull requests\",\n  \"description\": \"Review team members' code changes\",\n  \"completed\": false,\n  \"category_id\": 1,\n  \"priority\": \"medium\",\n  \"due_date\": \"2024-08-02T12:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/todos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Todo - Low Priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Update dependencies\",\n  \"description\": \"Check and update npm packages\",\n  \"completed\": false,\n  \"category_id\": 1,\n  \"priority\": \"low\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/todos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Todo - Personal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Morning workout\",\n  \"description\": \"30 minutes cardio exercise\",\n  \"completed\": false,\n  \"category_id\": 2,\n  \"priority\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/todos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Todo - Completed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Setup development environment\",\n  \"description\": \"Install Go, PostgreSQL, and required tools\",\n  \"completed\": true,\n  \"category_id\": 1,\n  \"priority\": \"high\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/todos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Todo by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Todo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Complete coding challenge - UPDATED\",\n  \"description\": \"Build a full-stack todo application with comprehensive tests\",\n  \"completed\": false,\n  \"category_id\": 1,\n  \"priority\": \"high\",\n  \"due_date\": \"2024-08-04T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/todos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Todo Completion",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos/1/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos", "1", "complete"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Todo",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Todos - Pagination",
+      "item": [
+        {
+          "name": "Get Todos - Page 1 (5 items)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?page=1&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Todos - Page 2 (5 items)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?page=2&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Todos - Search & Filters",
+      "item": [
+        {
+          "name": "Search Todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?search=coding",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "coding"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - Incomplete Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?completed=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "completed",
+                  "value": "false"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - Completed Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?completed=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "completed",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - By Category (Work)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?category_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "category_id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - High Priority",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?priority=high",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "priority",
+                  "value": "high"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - Medium Priority",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?priority=medium",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "priority",
+                  "value": "medium"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - Low Priority",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?priority=low",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "priority",
+                  "value": "low"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter - Combined (Incomplete + High Priority + Work)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?completed=false&category_id=1&priority=high",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "completed",
+                  "value": "false"
+                },
+                {
+                  "key": "category_id",
+                  "value": "1"
+                },
+                {
+                  "key": "priority",
+                  "value": "high"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Todos - Sorting",
+      "item": [
+        {
+          "name": "Sort by Title (Asc)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?sort_by=title&sort_order=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "title"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Created Date (Desc)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?sort_by=created_at&sort_order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "created_at"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Due Date (Asc)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?sort_by=due_date&sort_order=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "due_date"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Priority (Desc)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?sort_by=priority&sort_order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "priority"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Todos - Advanced Queries",
+      "item": [
+        {
+          "name": "Incomplete High Priority Work - By Due Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?completed=false&category_id=1&priority=high&sort_by=due_date&sort_order=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "completed",
+                  "value": "false"
+                },
+                {
+                  "key": "category_id",
+                  "value": "1"
+                },
+                {
+                  "key": "priority",
+                  "value": "high"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "due_date"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search + Filter Personal Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?search=workout&category_id=2",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "workout"
+                },
+                {
+                  "key": "category_id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All Completed - Newest First",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/todos?completed=true&sort_by=updated_at&sort_order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "todos"],
+              "query": [
+                {
+                  "key": "completed",
+                  "value": "true"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "updated_at"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
