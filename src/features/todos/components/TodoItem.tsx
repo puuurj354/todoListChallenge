@@ -1,4 +1,4 @@
-import { Card, Checkbox, Space, Button, Typography } from "antd"
+import { Card, Checkbox, Space, Button, Typography, Popconfirm } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import type { Todo } from "../../../types/todos"
 import { CategoryBadge, PriorityBadge } from "../../../ui"
@@ -53,13 +53,20 @@ const TodoItem: React.FC<TodoItemProps> = ({
               onClick={() => onEdit(todo)}
               size="small"
             />
-            <Button
-              type="text"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={() => onDelete(todo.id)}
-              size="small"
-            />
+            <Popconfirm
+              title="Delete Todo"
+              description="Are you sure you want to delete this todo?"
+              onConfirm={() => onDelete(todo.id)}
+              okText="Delete"
+              okButtonProps={{ danger: true }}
+            >
+              <Button
+                type="text"
+                danger
+                icon={<DeleteOutlined />}
+                size="small"
+              />
+            </Popconfirm>
           </Space>
         </Space>
 

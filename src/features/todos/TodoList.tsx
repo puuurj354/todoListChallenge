@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Space, Modal, Spin } from "antd"
+import { Space, Spin } from "antd"
 import { useTodoContext } from "../../context/useTodoContext"
 import StatisticsCards from "./components/StatisticsCards"
 import SearchBar from "../../ui/SearchBar"
@@ -46,22 +46,6 @@ const TodoList = () => {
   const handleEditTodo = (todo: Todo) => {
     setEditingTodo(todo)
     setModalVisible(true)
-  }
-
-  const handleDeleteTodo = (id: number) => {
-    Modal.confirm({
-      title: "Delete Todo",
-      content: "Are you sure you want to delete this todo?",
-      okText: "Delete",
-      okButtonProps: { danger: true },
-      onOk: async () => {
-        await deleteTodo(id)
-      },
-    })
-  }
-
-  const handleToggleComplete = async (id: number) => {
-    await toggleComplete(id)
   }
 
   const handleSubmitTodo = async (values: TodoInput) => {
@@ -123,9 +107,9 @@ const TodoList = () => {
                 <TodoItem
                   key={todo.id}
                   todo={todo}
-                  onToggleComplete={handleToggleComplete}
+                  onToggleComplete={toggleComplete}
                   onEdit={handleEditTodo}
-                  onDelete={handleDeleteTodo}
+                  onDelete={deleteTodo}
                 />
               ))}
             </div>
