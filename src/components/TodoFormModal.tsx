@@ -7,7 +7,7 @@ const { TextArea } = Input
 const { Option } = Select
 
 interface TodoFormModalProps {
-  visible: boolean
+  open: boolean
   todo: Todo | null
   categories: Category[]
   onCancel: () => void
@@ -15,7 +15,7 @@ interface TodoFormModalProps {
 }
 
 const TodoFormModal: React.FC<TodoFormModalProps> = ({
-  visible,
+  open,
   todo,
   categories,
   onCancel,
@@ -24,7 +24,7 @@ const TodoFormModal: React.FC<TodoFormModalProps> = ({
   const [form] = Form.useForm()
 
   useEffect(() => {
-    if (visible && todo) {
+    if (open && todo) {
       // Edit mode - populate form with todo data
       form.setFieldsValue({
         title: todo.title,
@@ -34,7 +34,7 @@ const TodoFormModal: React.FC<TodoFormModalProps> = ({
         due_date: todo.due_date ? dayjs(todo.due_date) : undefined,
         completed: todo.completed,
       })
-    } else if (visible) {
+    } else if (open) {
       // Create mode - reset form
       form.resetFields()
       form.setFieldsValue({
@@ -42,7 +42,7 @@ const TodoFormModal: React.FC<TodoFormModalProps> = ({
         completed: false,
       })
     }
-  }, [visible, todo, form])
+  }, [open, todo, form])
 
   const handleSubmit = async () => {
     try {
@@ -67,7 +67,7 @@ const TodoFormModal: React.FC<TodoFormModalProps> = ({
   return (
     <Modal
       title={todo ? "Edit Todo" : "Create New Todo"}
-      open={visible}
+      open={open}
       onCancel={onCancel}
       onOk={handleSubmit}
       okText={todo ? "Update" : "Create"}

@@ -1,6 +1,8 @@
-import { Card, Checkbox, Tag, Space, Button, Typography } from "antd"
+import { Card, Checkbox, Space, Button, Typography } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
 import type { Todo } from "../types/todos"
+import CategoryBadge from "./CategoryBadge"
+import PriorityBadge from "./PriorityBadge"
 
 const { Text, Paragraph } = Typography
 
@@ -17,32 +19,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "#f5222d"
-      case "medium":
-        return "#faad14"
-      case "low":
-        return "#52c41a"
-      default:
-        return "#d9d9d9"
-    }
-  }
-
-  const getPriorityBgColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "#fff1f0"
-      case "medium":
-        return "#fffbe6"
-      case "low":
-        return "#f6ffed"
-      default:
-        return "#fafafa"
-    }
-  }
-
   return (
     <Card
       style={{
@@ -51,7 +27,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
         opacity: todo.completed ? 0.7 : 1,
         transition: "all 0.3s ease",
       }}
-      bodyStyle={{ padding: "16px 20px" }}
+      styles={{ body: { padding: "16px 20px" } }}
     >
       <Space direction="vertical" style={{ width: "100%" }} size={8}>
         <Space style={{ width: "100%", justifyContent: "space-between" }}>
@@ -102,30 +78,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
         )}
 
         <Space style={{ marginLeft: 24 }} size={8}>
-          {todo.category && (
-            <Tag
-              color={todo.category.color}
-              style={{
-                borderRadius: 4,
-                padding: "2px 8px",
-                fontWeight: 500,
-              }}
-            >
-              {todo.category.name}
-            </Tag>
-          )}
-          <Tag
-            style={{
-              backgroundColor: getPriorityBgColor(todo.priority),
-              color: getPriorityColor(todo.priority),
-              border: "none",
-              borderRadius: 4,
-              padding: "2px 8px",
-              fontWeight: 500,
-            }}
-          >
-            {todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}
-          </Tag>
+          {todo.category && <CategoryBadge category={todo.category} />}
+          <PriorityBadge priority={todo.priority} />
         </Space>
       </Space>
     </Card>
