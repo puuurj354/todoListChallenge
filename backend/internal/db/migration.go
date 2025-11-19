@@ -30,7 +30,6 @@ func RunMigrations(db *gorm.DB) error {
 	if err != nil {
 		return fmt.Errorf("failed to create migrate instance: %w", err)
 	}
-	defer m.Close()
 
 
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
@@ -59,7 +58,6 @@ func RollbackMigrations(db *gorm.DB, steps int) error {
 	if err != nil {
 		return fmt.Errorf("failed to create migrate instance: %w", err)
 	}
-	defer m.Close()
 
 	if err := m.Steps(-steps); err != nil {
 		return fmt.Errorf("failed to rollback migrations: %w", err)
