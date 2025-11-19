@@ -37,7 +37,9 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         color: category.color,
       })
     } else if (open) {
-      form.resetFields()
+      form.setFieldsValue({
+        color: "#3B82F6",
+      })
     }
   }, [open, category, form])
 
@@ -45,31 +47,27 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
     try {
       const values = await form.validateFields()
       await onSubmit(values)
-      form.resetFields()
     } catch (error) {
       console.error("Validation failed:", error)
     }
+  }
+
+  const handleCancel = () => {
+    form.resetFields()
+    onCancel()
   }
 
   return (
     <Modal
       title={category ? "Edit Category" : "Create New Category"}
       open={open}
-      onCancel={() => {
-        onCancel()
-        form.resetFields()
-      }}
+      onCancel={handleCancel}
       onOk={handleSubmit}
       okText={category ? "Update" : "Create"}
       confirmLoading={loading}
+      destroyOnClose
     >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={{
-          color: "#3B82F6",
-        }}
-      >
+      <Form form={form} layout="vertical" preserve={false}>
         <Form.Item
           label="Category Name"
           name="name"

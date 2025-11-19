@@ -56,6 +56,7 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({
       }
 
       setModalVisible(false)
+      setEditingCategory(null)
       onCategoriesChange()
     } catch (error) {
       message.error(
@@ -88,7 +89,10 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({
       <CategoryFormModal
         open={modalVisible}
         category={editingCategory}
-        onCancel={() => setModalVisible(false)}
+        onCancel={() => {
+          setModalVisible(false)
+          setEditingCategory(null)
+        }}
         onSubmit={handleSubmit}
         loading={loading}
       />
