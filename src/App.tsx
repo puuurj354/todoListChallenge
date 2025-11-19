@@ -1,104 +1,21 @@
 import { useState } from "react"
-import { Layout, Typography, Space, Modal, FloatButton, Spin } from "antd"
-import { QuestionCircleOutlined } from "@ant-design/icons"
+import { Layout, Typography, Tabs, FloatButton } from "antd"
+import {
+  QuestionCircleOutlined,
+  UnorderedListOutlined,
+  FolderOutlined,
+} from "@ant-design/icons"
 import { useTodoContext } from "./context/useTodoContext"
-import StatisticsCards from "./components/StatisticsCards"
-import SearchBar from "./components/SearchBar"
-import FilterBar from "./components/FilterBar"
-import AddTodoButton from "./components/AddTodoButton"
-import TodoItem from "./components/TodoItem"
-import TodoFormModal from "./components/TodoFormModal"
-import TodoPagination from "./components/TodoPagination"
-import EmptyState from "./components/EmptyState"
-import type { Todo, TodoInput } from "./types/todos"
+import { TodoList } from "./features/todos"
+import { CategoryManager } from "./features/categories"
 import "./App.css"
 
 const { Header, Content } = Layout
 const { Title } = Typography
 
 function App() {
-  const {
-    todos,
-    categories,
-    loading,
-    statistics,
-    currentPage,
-    pageSize,
-    total,
-    filterCompleted,
-    filterCategoryId,
-    filterPriority,
-    toggleComplete,
-    deleteTodo,
-    updateTodo,
-    createTodo,
-    setCurrentPage,
-    setPageSize,
-    setSearchQuery,
-    setFilterCompleted,
-    setFilterCategoryId,
-    setFilterPriority,
-  } = useTodoContext()
-
-  // Modal state
-  const [modalVisible, setModalVisible] = useState(false)
-  const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
-
-  const handleCreateTodo = () => {
-    setEditingTodo(null)
-    setModalVisible(true)
-  }
-
-  const handleEditTodo = (todo: Todo) => {
-    setEditingTodo(todo)
-    setModalVisible(true)
-  }
-
-  const handleDeleteTodo = (id: number) => {
-    Modal.confirm({
-      title: "Delete Todo",
-      content: "Are you sure you want to delete this todo?",
-      okText: "Delete",
-      okButtonProps: { danger: true },
-      onOk: async () => {
-        await deleteTodo(id)
-      },
-    })
-  }
-
-  const handleToggleComplete = async (id: number) => {
-    await toggleComplete(id)
-  }
-
-  const handleSubmitTodo = async (values: TodoInput) => {
-    try {
-      if (editingTodo) {
-        await updateTodo(editingTodo.id, values)
-      } else {
-        await createTodo(values)
-      }
-      setModalVisible(false)
-    } catch (error) {
-      // Error handled in context
-    }
-  }
-
-  const handleSearch = (value: string) => {
-    setSearchQuery(value)
-    setCurrentPage(1) // Reset to first page on search
-  }
-
-  const handlePageChange = (page: number, size: number) => {
-    setCurrentPage(page)
-    setPageSize(size)
-  }
-
-  const handleClearFilters = () => {
-    setFilterCompleted(undefined)
-    setFilterCategoryId(undefined)
-    setFilterPriority(undefined)
-    setCurrentPage(1)
-  }
+  const { categories, fetchCategories } = useTodoContext()
+  const [activeTab, setActiveTab] = useState("todos")
 
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
@@ -122,58 +39,38 @@ function App() {
           width: "100%",
         }}
       >
-        <StatisticsCards statistics={statistics} />
-
-        <Space direction="vertical" style={{ width: "100%" }} size={16}>
-          <SearchBar onSearch={handleSearch} />
-
-          <FilterBar
-            filterCompleted={filterCompleted}
-            filterCategoryId={filterCategoryId}
-            filterPriority={filterPriority}
-            categories={categories}
-            onFilterCompletedChange={setFilterCompleted}
-            onFilterCategoryChange={setFilterCategoryId}
-            onFilterPriorityChange={setFilterPriority}
-            onClearFilters={handleClearFilters}
-          />
-
-          <AddTodoButton onClick={handleCreateTodo} />
-
-          <Spin spinning={loading}>
-            {todos.length === 0 ? (
-              <EmptyState />
-            ) : (
-              <div>
-                {todos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onToggleComplete={handleToggleComplete}
-                    onEdit={handleEditTodo}
-                    onDelete={handleDeleteTodo}
-                  />
-                ))}
-              </div>
-            )}
-          </Spin>
-
-          <TodoPagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={total}
-            onChange={handlePageChange}
-          />
-        </Space>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          items={[
+            {
+              key: "todos",
+              label: (
+                <span>
+                  <UnorderedListOutlined />
+                  Todo List
+                </span>
+              ),
+              children: <TodoList />,
+            },
+            {
+              key: "categories",
+              label: (
+                <span>
+                  <FolderOutlined />
+                  Categories
+                </span>
+              ),
+              children: (
+                <CategoryManager
+                  categories={categories}
+                  onCategoriesChange={fetchCategories}
+                />
+              ),
+            },
+          ]}
+        />
       </Content>
-
-      <TodoFormModal
-        open={modalVisible}
-        todo={editingTodo}
-        categories={categories}
-        onCancel={() => setModalVisible(false)}
-        onSubmit={handleSubmitTodo}
-      />
 
       <FloatButton
         icon={<QuestionCircleOutlined />}

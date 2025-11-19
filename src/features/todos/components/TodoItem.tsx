@@ -1,8 +1,7 @@
 import { Card, Checkbox, Space, Button, Typography } from "antd"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
-import type { Todo } from "../types/todos"
-import CategoryBadge from "./CategoryBadge"
-import PriorityBadge from "./PriorityBadge"
+import type { Todo } from "../../../types/todos"
+import { CategoryBadge, PriorityBadge } from "../../../ui"
 
 const { Text, Paragraph } = Typography
 

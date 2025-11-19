@@ -1,5 +1,5 @@
 import { Card, Row, Col } from "antd"
-import type { TodoStatistics } from "../types/todos"
+import type { TodoStatistics } from "../../../types/todos"
 
 interface StatisticsCardsProps {
   statistics: TodoStatistics

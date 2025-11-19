@@ -1,6 +1,6 @@
 import { Modal, Form, Input, Select, DatePicker, Switch } from "antd"
 import { useEffect } from "react"
-import type { Todo, TodoInput, Category } from "../types/todos"
+import type { Todo, TodoInput, Category } from "../../../types/todos"
 import dayjs from "dayjs"
 
 const { TextArea } = Input

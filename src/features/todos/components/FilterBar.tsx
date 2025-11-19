@@ -1,6 +1,6 @@
 import { Space, Select, Button } from "antd"
 import { FilterOutlined, ClearOutlined } from "@ant-design/icons"
-import type { Category } from "../types/todos"
+import type { Category } from "../../../types/todos"
 
 const { Option } = Select
 
