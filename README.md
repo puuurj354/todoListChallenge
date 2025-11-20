@@ -1,6 +1,6 @@
 # Todo List Challenge - Fullstack Application
 
-A modern, production-ready fullstack todo application built with Go backend and React frontend. This project demonstrates clean architecture, proper separation of concerns, and containerized deployment.
+A fullstack todo application built with Go backend and React frontend. This project demonstrates clean architecture, proper separation of concerns, and containerized deployment.
 
 ## 📋 Table of Contents
 
@@ -85,7 +85,6 @@ The application follows modern development practices including:
 
 - **Docker** - Containerization
 - **Docker Compose** - Multi-container orchestration
-- **Nginx** (Production) - Reverse proxy and static file serving
 
 ---
 
@@ -147,14 +146,14 @@ This will:
 
 Once all containers are running (you'll see "VITE ready" and "Server is running" in logs):
 
-- **Frontend UI:** http://localhost:5173
-- **Backend API:** http://localhost:8080/api
-- **Health Check:** http://localhost:8080/health
+- **Frontend UI:** <http://localhost:5173>
+- **Backend API:** <http://localhost:8080/api>
+- **Health Check:** <http://localhost:8080/health>
 - **PostgreSQL:** localhost:5433 (if you need direct database access)
 
 ### Step 4: Using the Application
 
-1. Open http://localhost:5173 in your browser
+1. Open <http://localhost:5173> in your browser
 2. You'll see the todo list interface
 3. Click "Manage Categories" to create categories first
 4. Add categories like "Work", "Personal", "Shopping"
@@ -232,7 +231,7 @@ Migrations run automatically on application start. Just run:
 go run cmd/main.go
 ```
 
-The backend server will start on http://localhost:8080
+The backend server will start on <http://localhost:8080>
 
 ### Frontend Setup
 
@@ -254,7 +253,7 @@ npm install
 npm run dev
 ```
 
-The frontend will start on http://localhost:5173
+The frontend will start on <http://localhost:5173>
 
 ---
 
@@ -680,103 +679,7 @@ This made the frontend code more type-safe and caught potential bugs during deve
 
 **Answer:**
 
-Yes, I have experience tracking down performance issues. Here's my systematic approach:
-
-**Immediate Response (Triage):**
-
-1. **Monitor Key Metrics:**
-
-   - Check server CPU, memory, and disk I/O usage
-   - Review application logs for errors or warnings
-   - Monitor database connection pool and query times
-   - Check API response times and error rates
-
-2. **Use APM Tools:**
-   - Application Performance Monitoring (e.g., New Relic, Datadog)
-   - Database query analyzers
-   - Network latency monitors
-
-**Investigation Process:**
-
-1. **Backend Performance Analysis:**
-
-```go
-// Add middleware for request timing
-func LoggingMiddleware() gin.HandlerFunc {
-    return func(c *gin.Context) {
-        start := time.Now()
-
-        c.Next()
-
-        duration := time.Since(start)
-        log.Printf("[%s] %s - %v", c.Request.Method, c.Request.URL.Path, duration)
-
-        // Alert if request takes > 500ms
-        if duration > 500*time.Millisecond {
-            log.Printf("SLOW REQUEST DETECTED: %s took %v", c.Request.URL.Path, duration)
-        }
-    }
-}
-```
-
-2. **Database Query Profiling:**
-
-```go
-// Enable GORM query logging in production with thresholds
-db.Logger = logger.New(
-    log.New(os.Stdout, "\r\n", log.LstdFlags),
-    logger.Config{
-        SlowThreshold: 200 * time.Millisecond, // Log slow queries
-        LogLevel:      logger.Warn,
-    },
-)
-```
-
-3. **Frontend Performance:**
-   - Use Chrome DevTools Performance tab
-   - React DevTools Profiler for component render times
-   - Network tab to identify slow API calls
-   - Lighthouse for performance metrics
-
-**Real Example:**
-
-In a previous project, users reported slow page loads. Investigation revealed:
-
-**Problem:** Frontend making N+1 API calls when loading todo list with categories.
-
-**Solution:**
-
-- Modified backend to preload category data with todos using GORM's `Preload`:
-
-```go
-// Before: Separate queries for each todo's category (N+1 problem)
-db.Find(&todos)
-
-// After: Single query with JOIN
-db.Preload("Category").Find(&todos)
-```
-
-**Result:** Page load time reduced from 2.3s to 0.4s (82% improvement)
-
-**Ongoing Monitoring:**
-
-1. **Set up alerts:**
-
-   - Response time > 500ms
-   - Error rate > 1%
-   - Memory usage > 80%
-   - Database connection pool exhaustion
-
-2. **Regular performance reviews:**
-
-   - Weekly review of slow query logs
-   - Monthly performance testing
-   - Load testing before major releases
-
-3. **Implement caching:**
-   - Redis for frequently accessed data
-   - HTTP caching headers
-   - Frontend state caching with React Query
+No, I haven't had works on a production system yet.
 
 ### 4. If you had more time, what additional features or improvements would you consider adding to the test project?
 
@@ -826,7 +729,6 @@ func AuthMiddleware() gin.HandlerFunc {
 
 - WebSocket integration for live updates
 - Multiple users can see changes in real-time
-- Optimistic UI updates
 
 **Implementation:**
 
@@ -850,31 +752,6 @@ func (h *TodoHandler) WebSocketHandler(c *gin.Context) {
 - Pagination for large todo lists
 - Lazy loading of categories
 - API response compression
-
-**5. Testing Enhancements:**
-
-- Frontend unit tests with Vitest/Jest
-- E2E tests with Playwright or Cypress
-- API integration tests
-- Load testing with k6 or Artillery
-- CI/CD pipeline with automated testing
-
-**6. Developer Experience:**
-
-- API versioning (`/api/v1/todos`)
-- OpenAPI/Swagger documentation
-- Request validation with structured error responses
-- Database seeding scripts for development
-- Development fixtures and mock data
-
-**7. UI/UX Improvements:**
-
-- Drag-and-drop todo reordering
-- Keyboard shortcuts
-- Dark mode theme
-- Mobile-responsive design improvements
-- Undo/Redo functionality
-- Bulk operations (select multiple todos)
 
 ## 📄 License
 
