@@ -107,7 +107,7 @@ docker compose version
 - **Go** 1.24 or higher
 - **Node.js** 20 or higher
 - **PostgreSQL** 16 or higher
-- **npm** or **yarn**
+- **npm** or **bun**
 
 ---
 
@@ -239,16 +239,16 @@ The backend server will start on <http://localhost:8080>
 cd ..  # from backend directory
 ```
 
-2. **Install npm dependencies:**
+2. **Install npm or bun dependencies:**
 
 ```bash
-npm install
+npm install or bun install
 ```
 
 3. **Start development server:**
 
 ```bash
-npm run dev
+npm run dev or bun run dev
 ```
 
 The frontend will start on <http://localhost:5173>
