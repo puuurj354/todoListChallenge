@@ -75,9 +75,13 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({
       title="Category Management"
       extra={
         <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
-          Add Category
+          <span className="hidden sm:inline">Add Category</span>
+          <span className="inline sm:hidden">Add</span>
         </Button>
       }
+      styles={{
+        body: { padding: "12px" },
+      }}
     >
       <CategoryTable
         categories={categories}

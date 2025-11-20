@@ -66,3 +66,59 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Responsive table improvements */
+@media (max-width: 768px) {
+  .ant-table {
+    font-size: 14px;
+  }
+  
+  .ant-table-thead > tr > th {
+    padding: 8px 4px !important;
+    font-size: 12px;
+  }
+  
+  .ant-table-tbody > tr > td {
+    padding: 8px 4px !important;
+  }
+
+  .ant-card-head-title {
+    font-size: 16px;
+  }
+
+  .ant-btn-sm {
+    padding: 0 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 6px 2px !important;
+  }
+
+  .ant-space-item {
+    margin-right: 4px !important;
+  }
+}
+
+/* Utility classes for responsive text */
+.hidden {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .sm\:inline {
+    display: inline;
+  }
+  .sm\:hidden {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .inline {
+    display: inline;
+  }
+}

@@ -21,6 +21,8 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       title: "Name",
       dataIndex: "name",
       key: "name",
+      fixed: "left",
+      width: 200,
       render: (name: string, record: Category) => (
         <Space>
           <div
@@ -30,6 +32,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
               backgroundColor: record.color,
               borderRadius: 4,
               border: "1px solid #d9d9d9",
+              flexShrink: 0,
             }}
           />
           <span>{name}</span>
@@ -40,21 +43,24 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       title: "Color",
       dataIndex: "color",
       key: "color",
-      width: 120,
+      width: 100,
+      responsive: ["md"],
     },
     {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
-      width: 180,
+      width: 140,
+      responsive: ["lg"],
       render: (date: string) => new Date(date).toLocaleDateString(),
     },
     {
       title: "Actions",
       key: "actions",
-      width: 120,
+      fixed: "right",
+      width: 160,
       render: (_: unknown, record: Category) => (
-        <Space>
+        <Space size="small">
           <Button
             type="link"
             icon={<EditOutlined />}
@@ -85,7 +91,9 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       dataSource={categories}
       rowKey="id"
       loading={loading}
-      pagination={{ pageSize: 10 }}
+      pagination={{ pageSize: 10, responsive: true }}
+      scroll={{ x: 600 }}
+      size="middle"
     />
   )
 }
