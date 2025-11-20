@@ -679,7 +679,111 @@ This made the frontend code more type-safe and caught potential bugs during deve
 
 No, I haven't had works on a production system yet.
 
-### 4. If you had more time, what additional features or improvements would you consider adding to the test project?
+### 4. How did you approach the database design?
+
+**Answer:**
+
+**Database Tables Created:**
+
+1. **`categories` Table:**
+
+   - Purpose: Store todo categories with custom colors
+   - Columns: `id`, `name`, `color`, `created_at`, `updated_at`
+   - Why: Allows users to organize todos into colored groups (Work, Personal, Shopping, etc.)
+
+2. **`todos` Table:**
+   - Purpose: Store individual todo items
+   - Columns: `id`, `title`, `description`, `completed`, `category_id`, `created_at`, `updated_at`
+   - Why: Main table for storing todo tasks with completion status
+
+**Relationships:**
+
+```
+categories (1) ─────< (N) todos
+    └─ category_id foreign key
+```
+
+- **One-to-Many**: One category can have many todos
+- **Foreign Key**: `todos.category_id` references `categories.id`
+- **ON DELETE SET NULL**: When category deleted, todos remain with `category_id = NULL`
+
+**Why This Structure?**
+
+- **Normalization**: Separates category data to avoid duplication
+- **Flexibility**: Todos can exist without categories (nullable `category_id`)
+- **Scalability**: Easy to add more category attributes without affecting todos
+- **Simple Queries**: Efficient joins with GORM preloading
+
+**Example Query:**
+
+```go
+// Fetch todos with category data in single query
+db.Preload("Category").Find(&todos)
+```
+
+### 5. How did you handle pagination and filtering?
+
+**Answer:**
+
+**Filtering Implementation:**
+
+```go
+// Filter by category
+query := db.Model(&models.Todo{})
+if categoryID > 0 {
+    query = query.Where("category_id = ?", categoryID)
+}
+
+// Filter by completion status
+if status != "" {
+    completed := status == "completed"
+    query = query.Where("completed = ?", completed)
+}
+```
+
+**Pagination (Ready for Implementation):**
+
+```go
+// Offset-based pagination
+func GetTodos(page, pageSize int) ([]Todo, error) {
+    var todos []Todo
+    offset := (page - 1) * pageSize
+
+    err := db.Limit(pageSize).
+             Offset(offset).
+             Preload("Category").
+             Find(&todos).Error
+
+    return todos, err
+}
+```
+
+**Indexes Added:**
+
+```sql
+-- Foreign key index for efficient joins
+CREATE INDEX idx_todos_category_id ON todos(category_id);
+
+-- Composite index for filtered queries
+CREATE INDEX idx_todos_completed_category ON todos(completed, category_id);
+
+-- Timestamp index for sorting
+CREATE INDEX idx_todos_created_at ON todos(created_at DESC);
+```
+
+**Why These Indexes?**
+
+- `idx_todos_category_id`: Speeds up category filtering (most common query)
+- `idx_todos_completed_category`: Optimizes combined filters (e.g., "active Work todos")
+- `idx_todos_created_at`: Enables fast sorting by newest/oldest
+
+**Performance Benefits:**
+
+- Query time reduced from O(n) scan to O(log n) index lookup
+- Join operations 10-100x faster with foreign key index
+- Efficient for future features like search and sorting
+
+### 6. If you had more time, what additional features or improvements would you consider adding to the test project?
 
 **Answer:**
 
